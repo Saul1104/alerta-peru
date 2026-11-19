@@ -17,6 +17,8 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
   const [regEmail, setRegEmail] = useState('maria.valdez@example.com');
   const [regPass, setRegPass] = useState('Alerta2026');
   const [regPass2, setRegPass2] = useState('Alerta2026');
+  const [showRegPass, setShowRegPass] = useState(false);
+  const [showRegPass2, setShowRegPass2] = useState(false);
   const [acceptPolicy, setAcceptPolicy] = useState(true);
   const [otpDigits, setOtpDigits] = useState(['4', '8', '2', '9', '1', '3']);
 
@@ -374,15 +376,7 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
           Iniciar sesión
         </button>
 
-        <p className="t-15" style={{ color: 'var(--text2)', textAlign: 'center' }}>
-          o
-        </p>
-
-        <button className="btn-secondary" onClick={() => onNavigate('verificar-codigo')}>
-          Continuar con teléfono
-        </button>
-
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, paddingTop: 4 }} className="t-15">
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, paddingTop: 8 }} className="t-15">
           <span style={{ color: 'var(--text2)' }}>¿No tienes cuenta?</span>
           <button
             onClick={() => onNavigate('crear-cuenta')}
@@ -530,7 +524,21 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
         <div className="field-group">
           <label className="field-label">Contraseña</label>
           <div className="field-box">
-            <input type="password" className="field-input" value={regPass} onChange={(e) => setRegPass(e.target.value)} placeholder="Escribe tu contraseña" />
+            <input
+              type={showRegPass ? 'text' : 'password'}
+              className="field-input"
+              value={regPass}
+              onChange={(e) => setRegPass(e.target.value)}
+              placeholder="Escribe tu contraseña"
+            />
+            <button
+              type="button"
+              onClick={() => setShowRegPass(!showRegPass)}
+              style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontWeight: 600, cursor: 'pointer' }}
+              className="t-14"
+            >
+              {showRegPass ? 'Ocultar' : 'Mostrar'}
+            </button>
           </div>
           <span className="field-help">Usa letras y números.</span>
         </div>
@@ -538,7 +546,21 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
         <div className="field-group">
           <label className="field-label">Confirmar contraseña</label>
           <div className="field-box">
-            <input type="password" className="field-input" value={regPass2} onChange={(e) => setRegPass2(e.target.value)} placeholder="Repite tu contraseña" />
+            <input
+              type={showRegPass2 ? 'text' : 'password'}
+              className="field-input"
+              value={regPass2}
+              onChange={(e) => setRegPass2(e.target.value)}
+              placeholder="Repite tu contraseña"
+            />
+            <button
+              type="button"
+              onClick={() => setShowRegPass2(!showRegPass2)}
+              style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontWeight: 600, cursor: 'pointer' }}
+              className="t-14"
+            >
+              {showRegPass2 ? 'Ocultar' : 'Mostrar'}
+            </button>
           </div>
         </div>
 

@@ -214,6 +214,10 @@ button, a, input, textarea, select {
   position: relative;
 }
 
+.main-workspace.with-nav {
+  padding-bottom: calc(88px + env(safe-area-inset-bottom, 0));
+}
+
 @media (min-width: 900px) {
   .main-workspace.with-nav {
     flex-direction: row;
@@ -223,16 +227,20 @@ button, a, input, textarea, select {
   }
 }
 
-/* Navegación adaptable: lateral en escritorio, barra inferior en móvil */
+/* Navegación adaptable: barra inferior fija en móvil, lateral en escritorio */
 .app-nav {
   background-color: var(--surface);
   border-top: 1.5px solid var(--divider);
   display: flex;
-  height: 84px;
+  height: 72px;
   width: 100%;
-  position: sticky;
+  position: fixed;
   bottom: 0;
-  z-index: 40;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.08);
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 @media (min-width: 900px) {
@@ -247,6 +255,8 @@ button, a, input, textarea, select {
     padding: 16px 12px;
     gap: 6px;
     flex-shrink: 0;
+    box-shadow: none;
+    z-index: 40;
   }
 }
 

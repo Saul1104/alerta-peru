@@ -196,33 +196,6 @@ export const MainTabsViews: React.FC<Props> = ({
             ))}
           </div>
         </div>
-
-        {/* Accesos rápidos a módulos AP3 */}
-        <div className="card-surface" style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 }}>
-          <p className="t-14" style={{ fontWeight: 700, color: 'var(--text2)' }}>
-            EXPLORAR MÓDULOS DE ALERTA PERÚ AP3
-          </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-            <button className="proto-chip" onClick={() => onNavigate('ap3-catalogo-estados')}>
-              Catálogo de estados (AP3)
-            </button>
-            <button className="proto-chip" onClick={() => onNavigate('accesibilidad')}>
-              Accesibilidad y Daltonismo
-            </button>
-            <button className="proto-chip" onClick={() => setAcc((p) => ({ ...p, guidedTourStep: 1 }))}>
-              Recorrido guiado (5 pasos)
-            </button>
-            <button className="proto-chip" onClick={() => setAcc((p) => ({ ...p, screenReader: true, screenReaderStep: 1 }))}>
-              Lector de pantalla (6 vistas)
-            </button>
-            <button className="proto-chip" onClick={() => onNavigate('mailing')}>
-              Correos / Mailing
-            </button>
-            <button className="proto-chip" onClick={() => onNavigate('sistema-diseno')}>
-              Sistema de diseño y paleta
-            </button>
-          </div>
-        </div>
       </div>
     );
   }
@@ -234,12 +207,6 @@ export const MainTabsViews: React.FC<Props> = ({
       <div className="page-container">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
           <h1 className="t-24" style={{ fontWeight: 700 }}>Mapa de incidencias</h1>
-          <button
-            className="proto-chip"
-            onClick={() => onNavigate('ap3-vacio-busqueda')}
-          >
-            Simular búsqueda vacía
-          </button>
         </div>
 
         <div className="field-box" style={{ minHeight: 48 }}>
@@ -660,9 +627,6 @@ export const MainTabsViews: React.FC<Props> = ({
             </button>
             <h1 className="t-24" style={{ fontWeight: 700 }}>Datos personales</h1>
           </div>
-          <button className="proto-chip" onClick={() => onNavigate('esqueleto-datos-personales')}>
-            Ver estado de carga
-          </button>
         </div>
 
         <p className="t-15" style={{ color: 'var(--text2)' }}>Consulta y edita tu información.</p>
@@ -738,14 +702,6 @@ export const MainTabsViews: React.FC<Props> = ({
             </button>
             <h1 className="t-24" style={{ fontWeight: 700 }}>Historial de reportes</h1>
           </div>
-          <div style={{ display: 'flex', gap: 6 }}>
-            <button className="proto-chip" onClick={() => onNavigate('ap3-vacio-historial')}>
-              Vacío
-            </button>
-            <button className="proto-chip" onClick={() => onNavigate('ap3-carga-historial')}>
-              Esqueleto
-            </button>
-          </div>
         </div>
 
         <p className="t-15" style={{ color: 'var(--text2)' }}>
@@ -754,7 +710,6 @@ export const MainTabsViews: React.FC<Props> = ({
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span className="t-17" style={{ fontWeight: 700 }}>Tus reportes (3)</span>
-          <span className="t-13" style={{ color: 'var(--text2)' }}>Reportes de ejemplo</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

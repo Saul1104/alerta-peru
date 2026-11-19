@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ModalType, ReportDraft, ScreenId } from '../types';
 
 interface Props {
@@ -35,6 +35,38 @@ export const ReportFlowViews: React.FC<Props> = ({
   onNavigate,
   onOpenModal,
 }) => {
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    tipo: 'foto' | 'galeria' | 'archivo'
+  ) => {
+    const fileList = e.target.files;
+    if (!fileList || fileList.length === 0) return;
+    const newFiles: { id: string; nombre: string; tipo: 'foto' | 'galeria' | 'archivo'; tamano: string }[] = [];
+    for (let i = 0; i < fileList.length; i++) {
+      if (draft.archivos.length + newFiles.length >= 5) {
+        alert('Puedes adjuntar un máximo de 5 archivos.');
+        break;
+      }
+      const f = fileList[i];
+      const sizeMB = (f.size / (1024 * 1024)).toFixed(1);
+      newFiles.push({
+        id: String(Date.now() + Math.random()),
+        nombre: f.name,
+        tipo,
+        tamano: `${sizeMB} MB`,
+      });
+    }
+    setDraft((prev) => ({
+      ...prev,
+      archivos: [...prev.archivos, ...newFiles],
+    }));
+    e.target.value = '';
+  };
+
   const renderProgress = (step: number, pct: number) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="t-14">
@@ -92,7 +124,16 @@ export const ReportFlowViews: React.FC<Props> = ({
           })}
         </div>
 
-        <button className="btn-primary" onClick={() => onNavigate('denuncia-paso-2')}>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            if (!draft.tipo) {
+              alert('Por favor selecciona qué sucedió antes de continuar.');
+              return;
+            }
+            onNavigate('denuncia-paso-2');
+          }}
+        >
           Continuar
         </button>
       </div>
@@ -119,30 +160,12 @@ export const ReportFlowViews: React.FC<Props> = ({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <h2 className="t-22" style={{ fontWeight: 700 }}>Describe lo ocurrido</h2>
           <p className="t-15" style={{ color: 'var(--text2)' }}>
-            Incluye los datos que recuerdes. Toca el botón de autocompletar para usar un ejemplo rápido.
+            Incluye los datos que recuerdes.
           </p>
         </div>
 
         <div className="field-group">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <label className="field-label">Descripción (obligatorio)</label>
-            <button
-              type="button"
-              onClick={() =>
-                setDraft((prev) => ({
-                  ...prev,
-                  descripcion:
-                    'Dos personas en motocicleta arrebataron un celular en el cruce de Av. Larco con Calle Schell y huyeron hacia el sur.',
-                  fecha: '11/10/2026',
-                  hora: '18:30',
-                }))
-              }
-              style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}
-              className="t-13"
-            >
-              Autocompletar ejemplo
-            </button>
-          </div>
+          <label className="field-label">Descripción (obligatorio)</label>
           <textarea
             className={`field-textarea ${isValidationErr ? 'error' : ''}`}
             value={screen === 'ap3-error-validacion' && draft.descripcion.length >= 10 ? 'Robo' : draft.descripcion}
@@ -214,7 +237,7 @@ export const ReportFlowViews: React.FC<Props> = ({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <h2 className="t-22" style={{ fontWeight: 700 }}>Ubicación</h2>
           <p className="t-15" style={{ color: 'var(--text2)' }}>
-            Indica dónde ocurrió el hecho. Toca un campo para autocompletar.
+            Indica dónde ocurrió el hecho.
           </p>
         </div>
 
@@ -227,6 +250,9 @@ export const ReportFlowViews: React.FC<Props> = ({
               onChange={(e) => setDraft((prev) => ({ ...prev, distrito: e.target.value }))}
               style={{ background: 'transparent' }}
             >
+              <option value="" style={{ background: 'var(--surface)', color: 'var(--text2)' }}>
+                Selecciona un distrito
+              </option>
               {DISTRICTS.map((d) => (
                 <option key={d} value={d} style={{ background: 'var(--surface)', color: 'var(--text)' }}>
                   {d}
@@ -259,13 +285,6 @@ export const ReportFlowViews: React.FC<Props> = ({
 
         {/* Mapa miniatura interactivo de ajuste */}
         <div
-          onClick={() =>
-            setDraft((prev) => ({
-              ...prev,
-              distrito: 'Miraflores, Lima',
-              direccion: 'Av. José Larco cuadra 4 (frente al Parque Kennedy)',
-            }))
-          }
           style={{
             background: 'var(--primarysoft)',
             border: '1.5px solid var(--border)',
@@ -273,7 +292,6 @@ export const ReportFlowViews: React.FC<Props> = ({
             borderRadius: 12,
             position: 'relative',
             overflow: 'hidden',
-            cursor: 'pointer',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -287,7 +305,7 @@ export const ReportFlowViews: React.FC<Props> = ({
           <div style={{ position: 'absolute', background: 'var(--surface)', width: 8, top: 0, bottom: 0, left: '68%' }} />
           <img src="/assets/map-pin.svg" alt="" width={32} height={32} style={{ position: 'relative', zIndex: 2 }} />
           <div style={{ position: 'relative', zIndex: 2, background: 'var(--surface)', padding: '4px 12px', borderRadius: 8, border: '1px solid var(--divider)' }}>
-            <span className="t-13" style={{ fontWeight: 500 }}>Opcional: toca para ajustar el punto</span>
+            <span className="t-13" style={{ fontWeight: 500 }}>Punto de ubicación en el mapa</span>
           </div>
         </div>
 
@@ -300,24 +318,33 @@ export const ReportFlowViews: React.FC<Props> = ({
 
   // PASO 4: Evidencia y Galería
   if (screen === 'denuncia-paso-4') {
-    const addSampleFile = (tipo: 'foto' | 'galeria' | 'archivo') => {
-      if (draft.archivos.length >= 5) return;
-      const labels = {
-        foto: { nombre: `Foto_evidencia_0${draft.archivos.length + 1}.jpg`, tamano: '2.4 MB' },
-        galeria: { nombre: `Galeria_cruce_larco_0${draft.archivos.length + 1}.jpg`, tamano: '3.1 MB' },
-        archivo: { nombre: `Video_camara_seguridad.mp4`, tamano: '11.8 MB' },
-      }[tipo];
-      setDraft((prev) => ({
-        ...prev,
-        archivos: [
-          ...prev.archivos,
-          { id: String(Date.now() + Math.random()), tipo, ...labels },
-        ],
-      }));
-    };
-
     return (
       <div className="page-container">
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          style={{ display: 'none' }}
+          onChange={(e) => handleFileUpload(e, 'foto')}
+        />
+        <input
+          ref={galleryInputRef}
+          type="file"
+          accept="image/*,video/*"
+          multiple
+          style={{ display: 'none' }}
+          onChange={(e) => handleFileUpload(e, 'galeria')}
+        />
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="*/*"
+          multiple
+          style={{ display: 'none' }}
+          onChange={(e) => handleFileUpload(e, 'archivo')}
+        />
+
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <button
             onClick={() => onNavigate('denuncia-paso-3')}
@@ -340,7 +367,7 @@ export const ReportFlowViews: React.FC<Props> = ({
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
           <button
             type="button"
-            onClick={() => addSampleFile('foto')}
+            onClick={() => cameraInputRef.current?.click()}
             style={{
               background: 'var(--primarysoft)',
               border: '2px dashed var(--secondary)',
@@ -360,7 +387,7 @@ export const ReportFlowViews: React.FC<Props> = ({
 
           <button
             type="button"
-            onClick={() => addSampleFile('galeria')}
+            onClick={() => galleryInputRef.current?.click()}
             style={{
               background: 'var(--primarysoft)',
               border: '2px dashed var(--secondary)',
@@ -380,7 +407,7 @@ export const ReportFlowViews: React.FC<Props> = ({
 
           <button
             type="button"
-            onClick={() => addSampleFile('archivo')}
+            onClick={() => fileInputRef.current?.click()}
             style={{
               background: 'var(--primarysoft)',
               border: '2px dashed var(--secondary)',
@@ -406,7 +433,7 @@ export const ReportFlowViews: React.FC<Props> = ({
 
         {draft.archivos.length === 0 ? (
           <div className="card-surface" style={{ textAlign: 'center', padding: 28, color: 'var(--text2)' }}>
-            <p className="t-14">Aún no has adjuntado archivos. Toca uno de los botones superiores para agregar fotos o videos de demostración.</p>
+            <p className="t-14">Aún no has adjuntado archivos. Usa los botones superiores para seleccionar fotos, videos o documentos desde tu dispositivo.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -762,27 +789,6 @@ export const ReportFlowViews: React.FC<Props> = ({
             <img src="/assets/chevron-left.svg" alt="Atrás" width={28} height={28} />
           </button>
           <h1 className="t-24" style={{ fontWeight: 700 }}>Estado del reporte</h1>
-        </div>
-
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button
-            className={`proto-chip ${screen === 'estado-en-revision' ? 'active' : ''}`}
-            onClick={() => onNavigate('estado-en-revision')}
-          >
-            AP-2026-0412 (En revisión)
-          </button>
-          <button
-            className={`proto-chip ${screen === 'estado-robo-atendido' ? 'active' : ''}`}
-            onClick={() => onNavigate('estado-robo-atendido')}
-          >
-            EJ-ROBO-001 (Robo atendido)
-          </button>
-          <button
-            className={`proto-chip ${screen === 'estado-asalto-atendido' ? 'active' : ''}`}
-            onClick={() => onNavigate('estado-asalto-atendido')}
-          >
-            EJ-ASAL-002 (Asalto atendido)
-          </button>
         </div>
 
         <div>

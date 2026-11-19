@@ -114,16 +114,16 @@ export function App() {
   });
 
   const [draft, setDraft] = useState<ReportDraft>({
-    tipo: 'Robo o asalto',
+    tipo: '',
     descripcion: '',
-    fecha: '11/10/2026',
-    hora: '18:30',
-    distrito: 'Miraflores, Lima',
-    direccion: 'Av. José Larco cuadra 4',
+    fecha: '',
+    hora: '',
+    distrito: '',
+    direccion: '',
     archivos: [],
     identidad: 'anonima',
-    telefono: '+51 999 000 000',
-    correo: 'maria.valdez@example.com',
+    telefono: '',
+    correo: '',
     confirmado: true,
   });
 
