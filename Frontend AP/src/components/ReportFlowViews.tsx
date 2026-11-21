@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { ModalType, ReportDraft, ScreenId } from '../types';
 
 interface Props {
@@ -35,38 +35,6 @@ export const ReportFlowViews: React.FC<Props> = ({
   onNavigate,
   onOpenModal,
 }) => {
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const galleryInputRef = useRef<HTMLInputElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileUpload = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    tipo: 'foto' | 'galeria' | 'archivo'
-  ) => {
-    const fileList = e.target.files;
-    if (!fileList || fileList.length === 0) return;
-    const newFiles: { id: string; nombre: string; tipo: 'foto' | 'galeria' | 'archivo'; tamano: string }[] = [];
-    for (let i = 0; i < fileList.length; i++) {
-      if (draft.archivos.length + newFiles.length >= 5) {
-        alert('Puedes adjuntar un máximo de 5 archivos.');
-        break;
-      }
-      const f = fileList[i];
-      const sizeMB = (f.size / (1024 * 1024)).toFixed(1);
-      newFiles.push({
-        id: String(Date.now() + Math.random()),
-        nombre: f.name,
-        tipo,
-        tamano: `${sizeMB} MB`,
-      });
-    }
-    setDraft((prev) => ({
-      ...prev,
-      archivos: [...prev.archivos, ...newFiles],
-    }));
-    e.target.value = '';
-  };
-
   const renderProgress = (step: number, pct: number) => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} className="t-14">
@@ -112,28 +80,28 @@ export const ReportFlowViews: React.FC<Props> = ({
                 className={`option-card ${selected ? 'selected' : ''}`}
                 onClick={() => setDraft((prev) => ({ ...prev, tipo: t }))}
               >
-                <img
-                  src={selected ? '/assets/radio-selected.svg' : '/assets/radio-normal.svg'}
-                  alt=""
-                  width={24}
-                  height={24}
-                />
+                <div
+                  style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: 12,
+                    border: selected ? '2px solid var(--primary)' : '2px solid var(--border)',
+                    background: selected ? 'var(--primary)' : 'transparent',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  {selected && <img src="/assets/check-white.svg" alt="" width={14} height={14} />}
+                </div>
                 <span className="t-16" style={{ fontWeight: 500 }}>{t}</span>
               </button>
             );
           })}
         </div>
 
-        <button
-          className="btn-primary"
-          onClick={() => {
-            if (!draft.tipo) {
-              alert('Por favor selecciona qué sucedió antes de continuar.');
-              return;
-            }
-            onNavigate('denuncia-paso-2');
-          }}
-        >
+        <button className="btn-primary" onClick={() => onNavigate('denuncia-paso-2')}>
           Continuar
         </button>
       </div>
@@ -248,9 +216,9 @@ export const ReportFlowViews: React.FC<Props> = ({
               className="field-input"
               value={draft.distrito}
               onChange={(e) => setDraft((prev) => ({ ...prev, distrito: e.target.value }))}
-              style={{ background: 'transparent' }}
+              style={{ background: 'transparent', color: draft.distrito ? 'var(--text)' : 'var(--text2)' }}
             >
-              <option value="" style={{ background: 'var(--surface)', color: 'var(--text2)' }}>
+              <option value="" disabled style={{ background: 'var(--surface)', color: 'var(--text2)' }}>
                 Selecciona un distrito
               </option>
               {DISTRICTS.map((d) => (
@@ -285,6 +253,13 @@ export const ReportFlowViews: React.FC<Props> = ({
 
         {/* Mapa miniatura interactivo de ajuste */}
         <div
+          onClick={() =>
+            setDraft((prev) => ({
+              ...prev,
+              distrito: 'Miraflores, Lima',
+              direccion: 'Av. José Larco cuadra 4 (frente al Parque Kennedy)',
+            }))
+          }
           style={{
             background: 'var(--primarysoft)',
             border: '1.5px solid var(--border)',
@@ -292,6 +267,7 @@ export const ReportFlowViews: React.FC<Props> = ({
             borderRadius: 12,
             position: 'relative',
             overflow: 'hidden',
+            cursor: 'pointer',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -305,7 +281,7 @@ export const ReportFlowViews: React.FC<Props> = ({
           <div style={{ position: 'absolute', background: 'var(--surface)', width: 8, top: 0, bottom: 0, left: '68%' }} />
           <img src="/assets/map-pin.svg" alt="" width={32} height={32} style={{ position: 'relative', zIndex: 2 }} />
           <div style={{ position: 'relative', zIndex: 2, background: 'var(--surface)', padding: '4px 12px', borderRadius: 8, border: '1px solid var(--divider)' }}>
-            <span className="t-13" style={{ fontWeight: 500 }}>Punto de ubicación en el mapa</span>
+            <span className="t-13" style={{ fontWeight: 500 }}>Opcional: toca para ajustar el punto</span>
           </div>
         </div>
 
@@ -320,31 +296,6 @@ export const ReportFlowViews: React.FC<Props> = ({
   if (screen === 'denuncia-paso-4') {
     return (
       <div className="page-container">
-        <input
-          ref={cameraInputRef}
-          type="file"
-          accept="image/*"
-          capture="environment"
-          style={{ display: 'none' }}
-          onChange={(e) => handleFileUpload(e, 'foto')}
-        />
-        <input
-          ref={galleryInputRef}
-          type="file"
-          accept="image/*,video/*"
-          multiple
-          style={{ display: 'none' }}
-          onChange={(e) => handleFileUpload(e, 'galeria')}
-        />
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="*/*"
-          multiple
-          style={{ display: 'none' }}
-          onChange={(e) => handleFileUpload(e, 'archivo')}
-        />
-
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <button
             onClick={() => onNavigate('denuncia-paso-3')}
@@ -367,7 +318,7 @@ export const ReportFlowViews: React.FC<Props> = ({
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
           <button
             type="button"
-            onClick={() => cameraInputRef.current?.click()}
+            data-action="upload-foto"
             style={{
               background: 'var(--primarysoft)',
               border: '2px dashed var(--secondary)',
@@ -387,7 +338,7 @@ export const ReportFlowViews: React.FC<Props> = ({
 
           <button
             type="button"
-            onClick={() => galleryInputRef.current?.click()}
+            data-action="upload-galeria"
             style={{
               background: 'var(--primarysoft)',
               border: '2px dashed var(--secondary)',
@@ -407,7 +358,7 @@ export const ReportFlowViews: React.FC<Props> = ({
 
           <button
             type="button"
-            onClick={() => fileInputRef.current?.click()}
+            data-action="upload-archivo"
             style={{
               background: 'var(--primarysoft)',
               border: '2px dashed var(--secondary)',
@@ -433,7 +384,7 @@ export const ReportFlowViews: React.FC<Props> = ({
 
         {draft.archivos.length === 0 ? (
           <div className="card-surface" style={{ textAlign: 'center', padding: 28, color: 'var(--text2)' }}>
-            <p className="t-14">Aún no has adjuntado archivos. Usa los botones superiores para seleccionar fotos, videos o documentos desde tu dispositivo.</p>
+            <p className="t-14">No hay archivos adjuntos.</p>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -505,12 +456,21 @@ export const ReportFlowViews: React.FC<Props> = ({
             className={`option-card ${draft.identidad === 'anonima' ? 'selected' : ''}`}
             onClick={() => setDraft((prev) => ({ ...prev, identidad: 'anonima' }))}
           >
-            <img
-              src={draft.identidad === 'anonima' ? '/assets/radio-selected.svg' : '/assets/radio-normal.svg'}
-              alt=""
-              width={24}
-              height={24}
-            />
+            <div
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                border: draft.identidad === 'anonima' ? '2px solid var(--primary)' : '2px solid var(--border)',
+                background: draft.identidad === 'anonima' ? 'var(--primary)' : 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              {draft.identidad === 'anonima' && <img src="/assets/check-white.svg" alt="" width={14} height={14} />}
+            </div>
             <div>
               <p className="t-16" style={{ fontWeight: 500 }}>Enviar de forma anónima</p>
               <p className="t-13" style={{ color: 'var(--text2)' }}>Tu nombre y datos no se mostrarán.</p>
@@ -522,12 +482,21 @@ export const ReportFlowViews: React.FC<Props> = ({
             className={`option-card ${draft.identidad === 'compartir' ? 'selected' : ''}`}
             onClick={() => setDraft((prev) => ({ ...prev, identidad: 'compartir' }))}
           >
-            <img
-              src={draft.identidad === 'compartir' ? '/assets/radio-selected.svg' : '/assets/radio-normal.svg'}
-              alt=""
-              width={24}
-              height={24}
-            />
+            <div
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                border: draft.identidad === 'compartir' ? '2px solid var(--primary)' : '2px solid var(--border)',
+                background: draft.identidad === 'compartir' ? 'var(--primary)' : 'transparent',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0,
+              }}
+            >
+              {draft.identidad === 'compartir' && <img src="/assets/check-white.svg" alt="" width={14} height={14} />}
+            </div>
             <div>
               <p className="t-16" style={{ fontWeight: 500 }}>Compartir mis datos de contacto</p>
               <p className="t-13" style={{ color: 'var(--text2)' }}>La autoridad podrá comunicarse contigo.</p>
@@ -542,33 +511,35 @@ export const ReportFlowViews: React.FC<Props> = ({
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <p className="t-16" style={{ fontWeight: 700 }}>Datos de contacto (opcional)</p>
-          <div className="responsive-grid-2">
-            <div className="field-group">
-              <label className="field-label">Teléfono</label>
-              <div className="field-box">
-                <input
-                  className="field-input"
-                  value={draft.telefono}
-                  onChange={(e) => setDraft((prev) => ({ ...prev, telefono: e.target.value }))}
-                  placeholder="+51 999 000 000"
-                />
+        {draft.identidad === 'compartir' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <p className="t-16" style={{ fontWeight: 700 }}>Datos de contacto (opcional)</p>
+            <div className="responsive-grid-2">
+              <div className="field-group">
+                <label className="field-label">Teléfono</label>
+                <div className="field-box">
+                  <input
+                    className="field-input"
+                    value={draft.telefono}
+                    onChange={(e) => setDraft((prev) => ({ ...prev, telefono: e.target.value }))}
+                    placeholder="+51 999 000 000"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="field-group">
-              <label className="field-label">Correo</label>
-              <div className="field-box">
-                <input
-                  className="field-input"
-                  value={draft.correo}
-                  onChange={(e) => setDraft((prev) => ({ ...prev, correo: e.target.value }))}
-                  placeholder="maria.valdez@example.com"
-                />
+              <div className="field-group">
+                <label className="field-label">Correo</label>
+                <div className="field-box">
+                  <input
+                    className="field-input"
+                    value={draft.correo}
+                    onChange={(e) => setDraft((prev) => ({ ...prev, correo: e.target.value }))}
+                    placeholder="maria.valdez@example.com"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
 
         <button className="btn-primary" onClick={() => onNavigate('denuncia-paso-6')}>
           Continuar

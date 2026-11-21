@@ -124,7 +124,7 @@ export function App() {
     identidad: 'anonima',
     telefono: '',
     correo: '',
-    confirmado: true,
+    confirmado: false,
   });
 
   // Sincronizar atributos de tema/accesibilidad en el documento
@@ -354,6 +354,59 @@ export function App() {
 
       {/* Área de trabajo principal adaptable */}
       <div className={`main-workspace ${showNav ? 'with-nav' : ''}`}>
+        <main style={{ flex: 1, width: '100%' }}>
+          {AUTH_SCREENS.includes(screen) && (
+            <AuthViews
+              screen={screen}
+              onNavigate={setScreen}
+              onToggleDark={() => setAcc((p) => ({ ...p, darkMode: !p.darkMode }))}
+            />
+          )}
+
+          {(screen.startsWith('denuncia-') ||
+            screen === 'enviando-denuncia' ||
+            screen === 'confirmacion' ||
+            screen.startsWith('estado-') ||
+            screen === 'ap3-error-validacion') && (
+            <ReportFlowViews
+              screen={screen}
+              draft={draft}
+              setDraft={setDraft}
+              onNavigate={setScreen}
+              onOpenModal={setModal}
+            />
+          )}
+
+          {(screen === 'inicio' ||
+            screen === 'mapa' ||
+            screen === 'perfil' ||
+            screen === 'datos-personales' ||
+            screen === 'historial' ||
+            screen === 'privacidad-seguridad' ||
+            screen === 'accesibilidad' ||
+            screen === 'eliminar-cuenta' ||
+            screen.startsWith('ap3-eliminar-') ||
+            screen === 'ap3-catalogo-estados' ||
+            screen.startsWith('ap3-vacio-') ||
+            screen === 'ap3-carga-historial' ||
+            screen === 'ap3-error-conexion' ||
+            screen === 'ap3-error-sistema' ||
+            screen === 'ap3-contenido-no-disponible' ||
+            screen === 'ap3-sin-permisos' ||
+            screen.startsWith('esqueleto-')) && (
+            <MainTabsViews
+              screen={screen}
+              acc={acc}
+              setAcc={setAcc}
+              onNavigate={setScreen}
+              onOpenModal={setModal}
+            />
+          )}
+
+          {screen === 'mailing' && <MailingView onNavigate={setScreen} />}
+          {screen === 'sistema-diseno' && <DesignSystemView onNavigate={setScreen} />}
+        </main>
+
         {showNav && (
           <nav className="app-nav" aria-label="Navegación principal">
             <button
@@ -421,59 +474,6 @@ export function App() {
             </button>
           </nav>
         )}
-
-        <main style={{ flex: 1, width: '100%' }}>
-          {AUTH_SCREENS.includes(screen) && (
-            <AuthViews
-              screen={screen}
-              onNavigate={setScreen}
-              onToggleDark={() => setAcc((p) => ({ ...p, darkMode: !p.darkMode }))}
-            />
-          )}
-
-          {(screen.startsWith('denuncia-') ||
-            screen === 'enviando-denuncia' ||
-            screen === 'confirmacion' ||
-            screen.startsWith('estado-') ||
-            screen === 'ap3-error-validacion') && (
-            <ReportFlowViews
-              screen={screen}
-              draft={draft}
-              setDraft={setDraft}
-              onNavigate={setScreen}
-              onOpenModal={setModal}
-            />
-          )}
-
-          {(screen === 'inicio' ||
-            screen === 'mapa' ||
-            screen === 'perfil' ||
-            screen === 'datos-personales' ||
-            screen === 'historial' ||
-            screen === 'privacidad-seguridad' ||
-            screen === 'accesibilidad' ||
-            screen === 'eliminar-cuenta' ||
-            screen.startsWith('ap3-eliminar-') ||
-            screen === 'ap3-catalogo-estados' ||
-            screen.startsWith('ap3-vacio-') ||
-            screen === 'ap3-carga-historial' ||
-            screen === 'ap3-error-conexion' ||
-            screen === 'ap3-error-sistema' ||
-            screen === 'ap3-contenido-no-disponible' ||
-            screen === 'ap3-sin-permisos' ||
-            screen.startsWith('esqueleto-')) && (
-            <MainTabsViews
-              screen={screen}
-              acc={acc}
-              setAcc={setAcc}
-              onNavigate={setScreen}
-              onOpenModal={setModal}
-            />
-          )}
-
-          {screen === 'mailing' && <MailingView onNavigate={setScreen} />}
-          {screen === 'sistema-diseno' && <DesignSystemView onNavigate={setScreen} />}
-        </main>
       </div>
 
       {/* Modal: Cerrar sesión */}

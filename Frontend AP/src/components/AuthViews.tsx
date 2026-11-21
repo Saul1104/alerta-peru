@@ -8,8 +8,8 @@ interface AuthProps {
 }
 
 export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDark }) => {
-  const [loginEmail, setLoginEmail] = useState('maria.valdez@example.com');
-  const [loginPass, setLoginPass] = useState('••••••••••••');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPass, setLoginPass] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [recEmail, setRecEmail] = useState('maria.valdez@example.com');
   const [regName, setRegName] = useState('María Valdez');
@@ -17,35 +17,12 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
   const [regEmail, setRegEmail] = useState('maria.valdez@example.com');
   const [regPass, setRegPass] = useState('Alerta2026');
   const [regPass2, setRegPass2] = useState('Alerta2026');
-  const [showRegPass, setShowRegPass] = useState(false);
-  const [showRegPass2, setShowRegPass2] = useState(false);
   const [acceptPolicy, setAcceptPolicy] = useState(true);
   const [otpDigits, setOtpDigits] = useState(['4', '8', '2', '9', '1', '3']);
 
   if (screen === 'bienvenida') {
     return (
       <div className="page-container auth-container" style={{ position: 'relative' }}>
-        <button
-          onClick={onToggleDark}
-          title="Cambiar tema claro/oscuro"
-          style={{
-            position: 'absolute',
-            right: 24,
-            top: 12,
-            width: 48,
-            height: 48,
-            borderRadius: 24,
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-          }}
-        >
-          <img src="/assets/moon.svg" alt="Cambiar tema" width={22} height={22} />
-        </button>
-
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, marginTop: 12 }}>
           <div
             style={{
@@ -130,13 +107,6 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
           </button>
           <button className="btn-secondary" onClick={() => onNavigate('crear-cuenta')}>
             Crear cuenta
-          </button>
-          <button
-            className="btn-secondary"
-            style={{ borderStyle: 'dashed', minHeight: 44 }}
-            onClick={() => onNavigate('intro-1')}
-          >
-            Ver introducción (3 pasos)
           </button>
           <p
             className="t-13"
@@ -329,7 +299,6 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
               placeholder="tucorreo@ejemplo.com"
             />
           </div>
-          <span className="field-help">Usa el correo con el que te registraste.</span>
         </div>
 
         <div className="field-group">
@@ -353,15 +322,7 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <button
-            type="button"
-            onClick={() => onNavigate(isError ? 'login' : 'login-error')}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text2)', textDecoration: 'underline', cursor: 'pointer' }}
-            className="t-13"
-          >
-            {isError ? 'Ocultar estado de error' : 'Simular error de acceso'}
-          </button>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
           <button
             type="button"
             onClick={() => onNavigate('recuperar')}
@@ -376,7 +337,15 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
           Iniciar sesión
         </button>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, paddingTop: 8 }} className="t-15">
+        <p className="t-15" style={{ color: 'var(--text2)', textAlign: 'center' }}>
+          o
+        </p>
+
+        <button className="btn-secondary" onClick={() => onNavigate('verificar-codigo')}>
+          Continuar con teléfono
+        </button>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 6, paddingTop: 4 }} className="t-15">
           <span style={{ color: 'var(--text2)' }}>¿No tienes cuenta?</span>
           <button
             onClick={() => onNavigate('crear-cuenta')}
@@ -524,21 +493,7 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
         <div className="field-group">
           <label className="field-label">Contraseña</label>
           <div className="field-box">
-            <input
-              type={showRegPass ? 'text' : 'password'}
-              className="field-input"
-              value={regPass}
-              onChange={(e) => setRegPass(e.target.value)}
-              placeholder="Escribe tu contraseña"
-            />
-            <button
-              type="button"
-              onClick={() => setShowRegPass(!showRegPass)}
-              style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontWeight: 600, cursor: 'pointer' }}
-              className="t-14"
-            >
-              {showRegPass ? 'Ocultar' : 'Mostrar'}
-            </button>
+            <input type="password" className="field-input" value={regPass} onChange={(e) => setRegPass(e.target.value)} placeholder="Escribe tu contraseña" />
           </div>
           <span className="field-help">Usa letras y números.</span>
         </div>
@@ -546,21 +501,7 @@ export const AuthViews: React.FC<AuthProps> = ({ screen, onNavigate, onToggleDar
         <div className="field-group">
           <label className="field-label">Confirmar contraseña</label>
           <div className="field-box">
-            <input
-              type={showRegPass2 ? 'text' : 'password'}
-              className="field-input"
-              value={regPass2}
-              onChange={(e) => setRegPass2(e.target.value)}
-              placeholder="Repite tu contraseña"
-            />
-            <button
-              type="button"
-              onClick={() => setShowRegPass2(!showRegPass2)}
-              style={{ background: 'transparent', border: 'none', color: 'var(--primary)', fontWeight: 600, cursor: 'pointer' }}
-              className="t-14"
-            >
-              {showRegPass2 ? 'Ocultar' : 'Mostrar'}
-            </button>
+            <input type="password" className="field-input" value={regPass2} onChange={(e) => setRegPass2(e.target.value)} placeholder="Repite tu contraseña" />
           </div>
         </div>
 

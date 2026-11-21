@@ -205,9 +205,7 @@ export const MainTabsViews: React.FC<Props> = ({
     const activeIncident = MAP_ZONES[mapZone];
     return (
       <div className="page-container">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-          <h1 className="t-24" style={{ fontWeight: 700 }}>Mapa de incidencias</h1>
-        </div>
+        <h1 className="t-24" style={{ fontWeight: 700 }}>Mapa de incidencias</h1>
 
         <div className="field-box" style={{ minHeight: 48 }}>
           <img src="/assets/search.svg" alt="" width={20} height={20} />
@@ -251,23 +249,6 @@ export const MainTabsViews: React.FC<Props> = ({
               </button>
             );
           })}
-          <button
-            type="button"
-            onClick={() => setShowMapDetailSheet(!showMapDetailSheet)}
-            style={{
-              height: 44,
-              padding: '0 16px',
-              borderRadius: 22,
-              border: '1.5px solid var(--border)',
-              background: 'var(--surface)',
-              color: 'var(--text)',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
-            className="t-14"
-          >
-            {showMapDetailSheet ? 'Ocultar detalle' : 'Ver detalle ampliado'}
-          </button>
         </div>
 
         <div className="alert-box alert-info">
@@ -280,7 +261,7 @@ export const MainTabsViews: React.FC<Props> = ({
         {/* Mapa ilustrativo de Miraflores con vectores de Figma */}
         <div
           style={{
-            background: '#efeae2',
+            background: 'var(--map-base)',
             border: '1.5px solid var(--border)',
             height: 290,
             borderRadius: 12,
@@ -290,61 +271,61 @@ export const MainTabsViews: React.FC<Props> = ({
           }}
         >
           {/* Océano Pacífico */}
-          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '13%', background: '#b8d8e8' }}>
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '13%', background: 'var(--map-water)' }}>
             <img src="/assets/map-ocean.svg" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
 
           {/* Manzanas urbanas */}
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '17%', top: '5%', width: '28%', height: '18%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '17%', top: '28%', width: '28%', height: '15%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '17%', top: '49%', width: '28%', height: '18%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '17%', top: '74%', width: '28%', height: '20%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '17%', top: '5%', width: '28%', height: '18%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '17%', top: '28%', width: '28%', height: '15%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '17%', top: '49%', width: '28%', height: '18%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '17%', top: '74%', width: '28%', height: '20%', borderRadius: 6 }} />
 
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '49%', top: '5%', width: '16%', height: '18%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#cbe2c0', left: '49%', top: '27%', width: '16%', height: '17%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '49%', top: '49%', width: '16%', height: '18%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '49%', top: '74%', width: '32%', height: '20%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '49%', top: '5%', width: '16%', height: '18%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-park)', left: '49%', top: '27%', width: '16%', height: '17%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '49%', top: '49%', width: '16%', height: '18%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '49%', top: '74%', width: '32%', height: '20%', borderRadius: 6 }} />
 
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '68%', top: '5%', width: '14%', height: '18%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '68%', top: '28%', width: '14%', height: '15%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '68%', top: '49%', width: '14%', height: '18%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '68%', top: '5%', width: '14%', height: '18%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '68%', top: '28%', width: '14%', height: '15%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '68%', top: '49%', width: '14%', height: '18%', borderRadius: 6 }} />
 
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '86%', top: '5%', width: '11%', height: '18%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '86%', top: '28%', width: '11%', height: '15%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '86%', top: '49%', width: '11%', height: '18%', borderRadius: 6 }} />
-          <div style={{ position: 'absolute', background: '#e7e0d5', left: '86%', top: '74%', width: '11%', height: '20%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '86%', top: '5%', width: '11%', height: '18%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '86%', top: '28%', width: '11%', height: '15%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '86%', top: '49%', width: '11%', height: '18%', borderRadius: 6 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-block)', left: '86%', top: '74%', width: '11%', height: '20%', borderRadius: 6 }} />
 
           {/* Parques adicionales */}
-          <div style={{ position: 'absolute', background: '#cbe2c0', left: '13%', top: '54%', width: '7%', height: '13%', borderRadius: 5 }} />
-          <div style={{ position: 'absolute', background: '#cbe2c0', left: '18%', top: '74%', width: '11%', height: '12%', borderRadius: 5 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-park)', left: '13%', top: '54%', width: '7%', height: '13%', borderRadius: 5 }} />
+          <div style={{ position: 'absolute', background: 'var(--map-park)', left: '18%', top: '74%', width: '11%', height: '12%', borderRadius: 5 }} />
 
           {/* Rótulos de calles y lugares */}
-          <div style={{ position: 'absolute', left: '32%', top: '5%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: '#4a4550' }}>
+          <div style={{ position: 'absolute', left: '32%', top: '5%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
             Av. José Larco
           </div>
-          <div style={{ position: 'absolute', left: '22%', top: '20%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: '#4a4550' }}>
+          <div style={{ position: 'absolute', left: '22%', top: '20%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
             Av. Pardo
           </div>
-          <div style={{ position: 'absolute', left: '41%', top: '31%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: '#4a4550' }}>
+          <div style={{ position: 'absolute', left: '41%', top: '31%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
             Parque Kennedy
           </div>
-          <div style={{ position: 'absolute', left: '54%', top: '57%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: '#4a4550' }}>
+          <div style={{ position: 'absolute', left: '54%', top: '57%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
             Calle Schell
           </div>
-          <div style={{ position: 'absolute', left: '58%', top: '67%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: '#4a4550' }}>
+          <div style={{ position: 'absolute', left: '58%', top: '67%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
             Av. Benavides
           </div>
-          <div style={{ position: 'absolute', left: '74%', top: '35%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: '#4a4550' }}>
+          <div style={{ position: 'absolute', left: '74%', top: '35%', background: 'var(--map-label-bg)', padding: '2px 6px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
             Av. Arequipa
           </div>
 
           {/* Brújula Norte */}
-          <div style={{ position: 'absolute', right: 12, top: 10, width: 30, height: 30, borderRadius: 15, background: '#fff', border: '1px solid #cfc5b8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 12, color: '#4a4550' }}>
+          <div style={{ position: 'absolute', right: 12, top: 10, width: 30, height: 30, borderRadius: 15, background: 'var(--surface)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 12, color: 'var(--text)' }}>
             N
           </div>
 
           {/* Atribución */}
-          <div style={{ position: 'absolute', right: 12, bottom: 10, background: 'var(--map-label-bg)', padding: '2px 8px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: '#4a4550' }}>
+          <div style={{ position: 'absolute', right: 12, bottom: 10, background: 'var(--map-label-bg)', padding: '2px 8px', borderRadius: 6, fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
             Plano referencial · Miraflores
           </div>
 
@@ -436,6 +417,17 @@ export const MainTabsViews: React.FC<Props> = ({
           <p className="t-13" style={{ color: 'var(--text2)' }}>
             Sin datos personales ni direcciones exactas.
           </p>
+
+          {!showMapDetailSheet && (
+            <button
+              type="button"
+              className="btn-secondary"
+              style={{ marginTop: 6, minHeight: 42, padding: '8px 16px' }}
+              onClick={() => setShowMapDetailSheet(true)}
+            >
+              Ver detalle ampliado
+            </button>
+          )}
 
           {showMapDetailSheet && (
             <div style={{ marginTop: 8, paddingTop: 10, borderTop: '1px solid var(--divider)', display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -617,16 +609,14 @@ export const MainTabsViews: React.FC<Props> = ({
   if (screen === 'datos-personales') {
     return (
       <div className="page-container">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button
-              onClick={() => onNavigate('perfil')}
-              style={{ width: 48, height: 48, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <img src="/assets/chevron-left.svg" alt="Atrás" width={28} height={28} />
-            </button>
-            <h1 className="t-24" style={{ fontWeight: 700 }}>Datos personales</h1>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button
+            onClick={() => onNavigate('perfil')}
+            style={{ width: 48, height: 48, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <img src="/assets/chevron-left.svg" alt="Atrás" width={28} height={28} />
+          </button>
+          <h1 className="t-24" style={{ fontWeight: 700 }}>Datos personales</h1>
         </div>
 
         <p className="t-15" style={{ color: 'var(--text2)' }}>Consulta y edita tu información.</p>
@@ -650,7 +640,6 @@ export const MainTabsViews: React.FC<Props> = ({
           <div className="field-box" style={{ opacity: 0.85 }}>
             <input className="field-input" value="•••• 5678" readOnly />
           </div>
-          <span className="field-help">Verificado con RENIEC. No se puede editar.</span>
         </div>
 
         <div className="field-group">
@@ -672,7 +661,6 @@ export const MainTabsViews: React.FC<Props> = ({
           <div className="field-box">
             <input className="field-input" value={profPhone} onChange={(e) => setProfPhone(e.target.value)} />
           </div>
-          <span className="field-help">Formato: +51 999 999 999</span>
         </div>
 
         <button
@@ -692,16 +680,14 @@ export const MainTabsViews: React.FC<Props> = ({
   if (screen === 'historial') {
     return (
       <div className="page-container">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button
-              onClick={() => onNavigate('perfil')}
-              style={{ width: 48, height: 48, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <img src="/assets/chevron-left.svg" alt="Atrás" width={28} height={28} />
-            </button>
-            <h1 className="t-24" style={{ fontWeight: 700 }}>Historial de reportes</h1>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button
+            onClick={() => onNavigate('perfil')}
+            style={{ width: 48, height: 48, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            <img src="/assets/chevron-left.svg" alt="Atrás" width={28} height={28} />
+          </button>
+          <h1 className="t-24" style={{ fontWeight: 700 }}>Historial de reportes</h1>
         </div>
 
         <p className="t-15" style={{ color: 'var(--text2)' }}>
@@ -978,14 +964,9 @@ export const MainTabsViews: React.FC<Props> = ({
           <p className="t-14">
             Al eliminar tu cuenta se borran tu perfil y tu historial. Puedes revisar las consecuencias y alternativas antes de confirmar.
           </p>
-          <div className="responsive-grid-2">
-            <button className="btn-destructive" onClick={() => onNavigate('ap3-eliminar-1')}>
-              Eliminar cuenta (Flujo AP3 · 4 pasos)
-            </button>
-            <button className="btn-destructive" onClick={() => onNavigate('eliminar-cuenta')}>
-              Eliminar cuenta (Vista directa)
-            </button>
-          </div>
+          <button className="btn-destructive" onClick={() => onNavigate('ap3-eliminar-1')}>
+            Eliminar cuenta
+          </button>
         </div>
       </div>
     );
@@ -1054,12 +1035,21 @@ export const MainTabsViews: React.FC<Props> = ({
                     <p className="t-16" style={{ fontWeight: 600 }}>{opt.label}</p>
                     <p className="t-13" style={{ color: 'var(--text2)' }}>{opt.desc}</p>
                   </div>
-                  <img
-                    src={active ? '/assets/radio-selected.svg' : '/assets/radio-normal.svg'}
-                    alt=""
-                    width={24}
-                    height={24}
-                  />
+                  <div
+                    style={{
+                      width: 24,
+                      height: 24,
+                      borderRadius: 12,
+                      border: active ? '2px solid var(--primary)' : '2px solid var(--border)',
+                      background: active ? 'var(--primary)' : 'transparent',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {active && <img src="/assets/check-white.svg" alt="" width={14} height={14} />}
+                  </div>
                 </button>
               </React.Fragment>
             );
@@ -1142,6 +1132,7 @@ export const MainTabsViews: React.FC<Props> = ({
               type="button"
               onClick={() => setAcc((p) => ({ ...p, highContrast: !p.highContrast }))}
               className={`proto-chip ${acc.highContrast ? 'active' : ''}`}
+              style={{ width: 92, height: 36, flexShrink: 0, textAlign: 'center', padding: 0 }}
             >
               {acc.highContrast ? 'Sí' : 'No'}
             </button>
@@ -1161,6 +1152,7 @@ export const MainTabsViews: React.FC<Props> = ({
               type="button"
               onClick={() => setAcc((p) => ({ ...p, reducedTransparency: !p.reducedTransparency }))}
               className={`proto-chip ${acc.reducedTransparency ? 'active' : ''}`}
+              style={{ width: 92, height: 36, flexShrink: 0, textAlign: 'center', padding: 0 }}
             >
               {acc.reducedTransparency ? 'Sí' : 'No'}
             </button>
@@ -1180,6 +1172,7 @@ export const MainTabsViews: React.FC<Props> = ({
               type="button"
               onClick={() => setAcc((p) => ({ ...p, screenReader: !p.screenReader, screenReaderStep: 1 }))}
               className={`proto-chip ${acc.screenReader ? 'active' : ''}`}
+              style={{ width: 92, height: 36, flexShrink: 0, textAlign: 'center', padding: 0 }}
             >
               {acc.screenReader ? 'Activo' : 'Activar'}
             </button>
@@ -1415,8 +1408,8 @@ export const MainTabsViews: React.FC<Props> = ({
         <button className="btn-primary" onClick={() => onNavigate('perfil')}>
           Cancelar la eliminación
         </button>
-        <button className="btn-secondary" onClick={() => onNavigate('cuenta-eliminada')}>
-          Simular fin del plazo (30 días)
+        <button className="btn-destructive" onClick={() => onNavigate('cuenta-eliminada')}>
+          Eliminar cuenta ahora
         </button>
       </div>
     );
